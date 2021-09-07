@@ -2,10 +2,13 @@
 C# .Net 5.0 project to build BOF (Beacon Object Files) in mass
 
 ## Pre Req/ Install these first
-Install Linux subsystems for windows
-Install a Linux OS say ubuntu or kali form windows store
-`apt install gcc-mingw-w64-x86-64 i686-w64-mingw32-gcc make -y`
-Install Visual Studio for the 'x64 Native Tools Command Prompt for VS 2019'
+- Install Linux subsystems for windows
+
+- Install a Linux OS say ubuntu or kali form windows store
+ 
+- `apt install gcc-mingw-w64-x86-64 i686-w64-mingw32-gcc make -y`
+
+- Install Visual Studio for the 'x64 Native Tools Command Prompt for VS 2019'
 
 # How to Use
 Run tool from 'x64 Native Tools Command Prompt for VS 2019' (if your goal is to install x64)
