@@ -27,6 +27,8 @@ It runs like this `%comspec% /k "C:\Program Files (x86)\Microsoft Visual Studio\
 # Errors/ My stuff wont build
 - Why? Its often that the repo is missing something or has errors (errors like syntax or they coded it wrong). I can tell you i tested this on ~90% of BOF's on Github as of 09/2021 and most of them have errors as is. I suggest you fix them or send them an issue. The compiler output is shown to screen.
 
+- My fav error ` 1 | #include <Windows.h>` for a linux compile target LMFAO these people literally used the wrong import. Change to all lowercase. I rest my case for statement above.
+
 # Things to know
 
 - No, i did not check your BOF for lets call it malware
