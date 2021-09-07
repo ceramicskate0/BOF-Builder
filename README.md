@@ -1,5 +1,5 @@
 # BOF-Builder
-C# .Net 5.0 project to build BOF (Beacon Object Files) in mass
+C# .Net 5.0 project to build BOF (Beacon Object Files) in mass based on them all being in a folder directory stuct somewhere
 
 # Pre Req/ Install these first
 - Install Linux subsystems for windows
