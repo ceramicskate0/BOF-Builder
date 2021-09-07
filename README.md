@@ -20,7 +20,7 @@ Its normally got a bat file `C:\Program Files (x86)\Microsoft Visual Studio\2019
 It runs like this `%comspec% /k "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"`
 
 # Example Usage
-./BuildBOFs.exe C:\Path\To\BOF\Files\Dir
+`./BuildBOFs.exe C:\Path\To\BOF\Files\Dir`
 
 # Errors/ My stuff wont build
 - Why? Its often that the repo is missing something or has errors (errors like they coded it wrong). I can tell you i tested this on ~90% of BOF's on Github as of 09/2021 and most of the have errors as is. I suggest you fix them or send them an issue. The compiler output is shown to screen.
