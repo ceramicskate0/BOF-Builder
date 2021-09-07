@@ -13,6 +13,12 @@ C# .Net 5.0 project to build BOF (Beacon Object Files) in mass
 # How to Use
 Run tool from 'x64 Native Tools Command Prompt for VS 2019' (if your goal is to install x64)
 
+Its normally got a short cut here `C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Visual Studio 2019\Visual Studio Tools\VC`
+
+Its normally got a bat file `C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build`
+
+It runs like this `%comspec% /k "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"`
+
 # Example Usage
 ./BuildBOFs.exe C:\Path\To\BOF\Files\Dir
 
