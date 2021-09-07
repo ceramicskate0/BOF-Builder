@@ -1,7 +1,7 @@
 # BOF-Builder
 C# .Net 5.0 project to build BOF (Beacon Object Files) in mass
 
-## Pre Req/ Install these first
+# Pre Req/ Install these first
 - Install Linux subsystems for windows
 
 - Install a Linux OS say ubuntu or kali form windows store
@@ -24,3 +24,8 @@ It runs like this `%comspec% /k "C:\Program Files (x86)\Microsoft Visual Studio\
 
 # Errors/ My stuff wont build
 - Why? Its often that the repo is missing something or has errors (errors like they coded it wrong). I can tell you i tested this on ~90% of BOF's on Github as of 09/2021 and most of the have errors as is. I suggest you fix them or send them an issue. The compiler output is shown to screen.
+
+# Things to know
+
+- No, i did not check your BOF for lets call it malware
+- All this does it build the files. Thats it. 
