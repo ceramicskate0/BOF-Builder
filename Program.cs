@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -25,7 +25,9 @@ namespace BuildBOFs
             Console.WriteLine("[*] Building .c files");
             foreach (string file in CFiles)
             {
+                Console.WriteLine("[*] Building .c files via windows CL.exe");
                 BuildCL(file);
+                Console.WriteLine("[*] Building .c files via mingw bash.exe");
                 BuildBashC(file);
             }
             Console.WriteLine("[*] Building MakeFile files");
