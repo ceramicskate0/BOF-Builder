@@ -295,7 +295,7 @@ Commands:
             {
                 process.OutputDataReceived += new DataReceivedEventHandler(outdata);
                 process.BeginOutputReadLine();
-                process.StandardInput.WriteLine(LinuxBuild + " \"x86_64-w64-mingw32-gcc -c " + linuxfilePath + " -o " + outputPathLinux + "\"");
+                process.StandardInput.WriteLine(LinuxBuild + " \""+ migngw + " -c " + linuxfilePath + " -o " + outputPathLinux + "\"");
                 process.WaitForExit(timeout);
                 //process.StandardInput.WriteLine("exit");
             }
