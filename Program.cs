@@ -12,43 +12,132 @@ namespace BuildBOFs
         private static List<string> msvcFiles = new List<string>();
         private static List<string> MiscFiles = new List<string>();
         private static int timeout = 3000;
+        private static int counter = 1;
+        private static bool x64 = true;
+        private static string rootdir = "";
+        //Change linux build method by swapping the two vari below around
+        //private static string LinuxBuild = "bash -c";
+        private static string LinuxBuild = "wsl -e";
+        private static string migngw = "86_64-w64-mingw32-gcc";
 
         public static void Main(string[] args)
         {
             Logo();
-            if (args.Length<0)
+            if (args.Length < 0)
             {
                 Console.WriteLine("[!] Error. No input.");
                 Environment.Exit(1);
             }
-           string rootdir = args[0];
-           Console.WriteLine("[*] Searching root dir: " + rootdir);
-           Console.WriteLine("[*] Finding all the files to build");
-           DirSearch(rootdir);//get files of type we want
-           Console.WriteLine("[*] Total files Found: "+(CFiles.Count+ MakeFIles.Count+ msvcFiles.Count+ MiscFiles.Count));
-
+            ParseArgs(args);
+            Console.WriteLine("[*] Searching root dir: " + rootdir);
+            Console.WriteLine("[*] Finding all the files to build");
+            DirSearch(rootdir);//get files of type we want
+            Console.WriteLine("[*] Total files Found: " + (CFiles.Count + MakeFIles.Count + msvcFiles.Count + MiscFiles.Count));
+            Console.WriteLine("------------------------------------------------");
             Console.WriteLine("[*] Building .c files");
             foreach (string file in CFiles)
             {
+                Console.WriteLine("[*] Working file (" + counter + "\\" + (CFiles.Count + MakeFIles.Count + msvcFiles.Count + MiscFiles.Count) + ") "+file);
                 Console.WriteLine("[*] Building .c files via windows CL.exe");
                 BuildCL(file);
-                Console.WriteLine("[*] Building .c files via mingw bash.exe");
+                Console.WriteLine("[*] Building .c files via mingw '" + LinuxBuild + "'");
                 BuildBashC(file);
+                counter++;
             }
+            Console.WriteLine("------------------------------------------------");
             Console.WriteLine("[*] Building MakeFile files");
             foreach (string file in MakeFIles)
             {
+                Console.WriteLine("[*] Working file (" + counter + "\\" + (CFiles.Count + MakeFIles.Count + msvcFiles.Count + MiscFiles.Count) + ") " + file);
+
                 BuildMakeLinux(file);
+                counter++;
             }
+            Console.WriteLine("------------------------------------------------");
             Console.WriteLine("[*] Building .msvc files");
             foreach (string file in msvcFiles)
             {
+                Console.WriteLine("[*] Working file (" + counter + "\\" + (CFiles.Count + MakeFIles.Count + msvcFiles.Count + MiscFiles.Count) + ") " + file);
+
                 Buildnmake(file);
+                counter++;
             }
+            Console.WriteLine("------------------------------------------------");
             Console.WriteLine("[*] Building misc (.bat) files");
             foreach (string file in MiscFiles)
             {
+                Console.WriteLine("[*] Working file (" + counter + "\\" + (CFiles.Count + MakeFIles.Count + msvcFiles.Count + MiscFiles.Count) + ") " + file);
+
                 BuildBatFile(file);
+                counter++;
+            }
+        }
+
+        private static void Usage()
+        {
+            Console.WriteLine(@"
+Usage:
+
+Example: BuildBOFs.exe -rootdir C:\Path\to\BOFs
+
+Commands:
+-rootdir
+    The folder that contains the BOF files to build (REQUIRED)
+-x86
+    Tell to compile linux bins for x86 (i686-w64-mingw32-gcc)
+-x64
+    Tell to compile linux bins for x64 (86_64-w64-mingw32-gcc) (DEFAULT)
+-timeout
+    Sets the timeout for the process who is building bin (DEFAULT 3 seconds) (time in milliseconds)
+-linuxbuildbash
+    Tell app to use bash instead of wsl to compile linux bins
+                ");
+        }
+
+        private static void ParseArgs(string[] args)
+        {
+            if (args.Length <= 0)
+            {
+                Usage();
+                Environment.Exit(0);
+            }
+            for (int x = 0; x < args.Length; ++x)
+            {
+                try
+                {
+                    switch (args[0].ToLower())
+                    {
+                        case "-x86":
+                            x64 = false;
+                            migngw = "i686-w64-mingw32-gcc";
+                            break;
+                        case "-x64":
+                            x64 = true;
+                            migngw = "86_64-w64-mingw32-gcc";
+                            break;
+                        case "-timeout":
+                            timeout = Convert.ToInt32(args[x+1]);
+                            break;
+                        case "-linuxbuildbash":
+                            LinuxBuild = "bash -c";
+                            break;
+                        case "-rootdir":
+                            rootdir = args[x+1];
+                    break;
+                }
+                }
+                catch (Exception e)
+                {
+                    Usage();
+                    Console.WriteLine("[Error] Invalid input " + e.Message.ToString());
+                }
+            }
+            if (string.IsNullOrEmpty(rootdir)== true)
+            {
+                Console.WriteLine("[Error] MISSING REQUIRED rootdir arg/input!!!");
+
+                Usage();
+                Environment.Exit(0);
             }
         }
 
@@ -132,74 +221,85 @@ namespace BuildBOFs
             {
                 process.OutputDataReceived += new DataReceivedEventHandler(outdata);
                 process.BeginOutputReadLine();
-                process.StandardInput.WriteLine("start "+BatFile);
+                process.StandardInput.WriteLine("start " + BatFile);
                 process.WaitForExit(timeout);
+                // process.StandardInput.WriteLine("exit");
             }
         }
 
         public static void BuildCL(string CFile)
         {
-            string filename = Path.GetFileName(CFile).Split('.')[0];
+            string filename = Path.GetFileName(CFile);
+            string ext = Path.GetExtension(CFile);
+            filename = filename.Replace(ext, "");
             string workingdir = Path.GetDirectoryName(CFile);
-            //string startVScl = "\"" + @"C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\vcvars32.bat" + "\"";
-            //string startVScl = "C:\\Program Files(x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat";
 
-            using (var process = Process.Start(new ProcessStartInfo { FileName = @"cmd",Arguments="",WorkingDirectory= workingdir, UseShellExecute = false ,RedirectStandardInput = true, RedirectStandardOutput = true }))
-            {
-                process.OutputDataReceived += new DataReceivedEventHandler(outdata);
-                process.BeginOutputReadLine();
-                process.StandardInput.WriteLine(@"cl /GS- /nologo /Od /Oi /c " + filename + ".c /F" + filename + ".o");
-                process.WaitForExit(timeout);
-            }
-        }
-
-        public static void Buildnmake(string MsvcFile)
-        {
-            string filename = Path.GetFileName(MsvcFile).Split('.')[0];
-            string workingdir = Path.GetDirectoryName(MsvcFile);
-            //string startVScl = "\"" + @"C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\vcvars32.bat" + "\"";
 
             using (var process = Process.Start(new ProcessStartInfo { FileName = @"cmd", Arguments = "", WorkingDirectory = workingdir, UseShellExecute = false, RedirectStandardInput = true, RedirectStandardOutput = true }))
             {
                 process.OutputDataReceived += new DataReceivedEventHandler(outdata);
                 process.BeginOutputReadLine();
-                process.StandardInput.WriteLine(@"nmake -f "+ MsvcFile + " build");
+                process.StandardInput.WriteLine(@"cl /GS- /nologo /Od /Oi /c " + filename + ext + " /F" + filename + ".o");
                 process.WaitForExit(timeout);
+                //process.StandardInput.WriteLine("exit");
+            }
+        }
+
+        public static void Buildnmake(string MsvcFile)
+        {
+            string filename = Path.GetFileName(MsvcFile);
+            string ext = Path.GetExtension(MsvcFile);
+            filename = filename.Replace(ext, "");
+            string workingdir = Path.GetDirectoryName(MsvcFile);
+
+            using (var process = Process.Start(new ProcessStartInfo { FileName = @"cmd", Arguments = "", WorkingDirectory = workingdir, UseShellExecute = false, RedirectStandardInput = true, RedirectStandardOutput = true }))
+            {
+                process.OutputDataReceived += new DataReceivedEventHandler(outdata);
+                process.BeginOutputReadLine();
+                process.StandardInput.WriteLine(@"nmake -f " + MsvcFile + " build");
+                process.WaitForExit(timeout);
+                //process.StandardInput.WriteLine("exit");
             }
         }
 
         public static void BuildMakeLinux(string MakeFile)
         {
-            string filename = Path.GetFileName(MakeFile).Split('.')[0];
+            string filename = Path.GetFileName(MakeFile);
+            string ext = Path.GetExtension(MakeFile);
+            filename = filename.Replace(ext, "");
             string workingdir = Path.GetDirectoryName(MakeFile);
-            string linuxfilePath = workingdir.Replace('\\', '/').Replace(@"C:/", @"/mnt/c/") + '/' + filename + ".c";
+            string linuxfilePath = workingdir.Replace('\\', '/').Replace(@"C:/", @"/mnt/c/") + '/' + filename + ext;
             string outputPathLinux = workingdir.Replace('\\', '/').Replace(@"C:/", @"/mnt/c/") + '/' + filename + ".o";
             workingdir = Path.GetDirectoryName(MakeFile).Replace('\\', '/').Replace(@"C:/", @"/mnt/c/");
-            
+
             using (var process = Process.Start(new ProcessStartInfo { FileName = @"cmd", Arguments = "", WorkingDirectory = Path.GetDirectoryName((MakeFile)), UseShellExecute = false, RedirectStandardInput = true, RedirectStandardOutput = true }))
             {
                 process.OutputDataReceived += new DataReceivedEventHandler(outdata);
                 process.BeginOutputReadLine();
-                process.StandardInput.WriteLine("bash -c \"cd "+workingdir+" && make\"");
+                process.StandardInput.WriteLine(LinuxBuild + " \"cd " + workingdir + " && make\"");
                 process.WaitForExit(timeout);
+                //process.StandardInput.WriteLine("exit");
             }
         }
 
         public static void BuildBashC(string CFile)
         {
-            string filename = Path.GetFileName(CFile).Split('.')[0];
+            string filename = Path.GetFileName(CFile);
+            string ext = Path.GetExtension(CFile);
+            filename = filename.Replace(ext, "");
             string workingdir = Path.GetDirectoryName(CFile);
-            string linuxfilePath = workingdir.Replace('\\', '/').Replace(@"C:/", @"/mnt/c/") + '/' + filename+ ".c";
+            string linuxfilePath = workingdir.Replace('\\', '/').Replace(@"C:/", @"/mnt/c/") + '/' + filename + ext;
             string outputPathLinux = workingdir.Replace('\\', '/').Replace(@"C:/", @"/mnt/c/") + '/' + filename + ".o";
 
             using (var process = Process.Start(new ProcessStartInfo { FileName = @"cmd", Arguments = "", WorkingDirectory = Path.GetDirectoryName((CFile)), UseShellExecute = false, RedirectStandardInput = true, RedirectStandardOutput = true }))
             {
                 process.OutputDataReceived += new DataReceivedEventHandler(outdata);
                 process.BeginOutputReadLine();
-                process.StandardInput.WriteLine("bash -c \"x86_64-w64-mingw32-gcc -c " + linuxfilePath + " -o " + outputPathLinux + "\"");
+                process.StandardInput.WriteLine(LinuxBuild + " \"x86_64-w64-mingw32-gcc -c " + linuxfilePath + " -o " + outputPathLinux + "\"");
                 process.WaitForExit(timeout);
+                //process.StandardInput.WriteLine("exit");
             }
         }
-        
+
     }
 }
