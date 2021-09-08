@@ -16,6 +16,11 @@ namespace BuildBOFs
         public static void Main(string[] args)
         {
             Logo();
+            if (args.Length<0)
+            {
+                Console.WriteLine("[!] Error. No input.");
+                Environment.Exit(1);
+            }
            string rootdir = args[0];
            Console.WriteLine("[*] Searching root dir: " + rootdir);
            Console.WriteLine("[*] Finding all the files to build");
