@@ -15,7 +15,7 @@ namespace BuildBOFs
         private static int counter = 1;
         private static bool x64 = true;
         private static string rootdir = "";
-        private static string LinuxBuild = "wsl -e";
+        private static string LinuxBuild = "bash -c";
         private static string migngw = "86_64-w64-mingw32-gcc";
 
         public static void Main(string[] args)
@@ -105,8 +105,8 @@ Commands:
     Tell to compile linux bins for x64 (86_64-w64-mingw32-gcc) (DEFAULT)
 -timeout
     Sets the timeout for the process who is building bin (DEFAULT 3 seconds) (time in milliseconds)
--linuxbuildbash
-    Tell app to use bash instead of wsl to compile linux bins
+-wsl
+    Tell app to use wsl.exe instead of bash.exe to compile linux bins
                 ");
         }
 
@@ -129,13 +129,12 @@ Commands:
                             break;
                         case "-x64":
                             x64 = true;
-                            migngw = "86_64-w64-mingw32-gcc";
                             break;
                         case "-timeout":
                             timeout = Convert.ToInt32(args[x+1]);
                             break;
-                        case "-linuxbuildbash":
-                            LinuxBuild = "bash -c";
+                        case "-wsl":
+                            LinuxBuild = "wsl -e";
                             break;
                         case "-rootdir":
                             rootdir = args[x+1];
@@ -292,7 +291,7 @@ Commands:
             {
                 process.OutputDataReceived += new DataReceivedEventHandler(outdata);
                 process.BeginOutputReadLine();
-                process.StandardInput.WriteLine(LinuxBuild + " \"cd " + workingdir + " && make\"");
+                process.StandardInput.WriteLine(LinuxBuild + " \"cd " + workingdir + " && "+MakeFile+" make\"");
                 process.WaitForExit(timeout);
                 //process.StandardInput.WriteLine("exit");
             }
