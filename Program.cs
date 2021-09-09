@@ -15,8 +15,6 @@ namespace BuildBOFs
         private static int counter = 1;
         private static bool x64 = true;
         private static string rootdir = "";
-        //Change linux build method by swapping the two vari below around
-        //private static string LinuxBuild = "bash -c";
         private static string LinuxBuild = "wsl -e";
         private static string migngw = "86_64-w64-mingw32-gcc";
 
@@ -49,8 +47,14 @@ namespace BuildBOFs
             foreach (string file in MakeFIles)
             {
                 Console.WriteLine("[*] Working file (" + counter + "\\" + (CFiles.Count + MakeFIles.Count + msvcFiles.Count + MiscFiles.Count) + ") " + file);
-
-                BuildMakeLinux(file);
+                try
+                {
+                    BuildMakeLinux(file);
+                }
+                catch
+                {
+                    Console.WriteLine("[!] Error building " + file);
+                }
                 counter++;
             }
             Console.WriteLine("------------------------------------------------");
@@ -58,8 +62,14 @@ namespace BuildBOFs
             foreach (string file in msvcFiles)
             {
                 Console.WriteLine("[*] Working file (" + counter + "\\" + (CFiles.Count + MakeFIles.Count + msvcFiles.Count + MiscFiles.Count) + ") " + file);
-
-                Buildnmake(file);
+                try
+                {
+                    Buildnmake(file);
+                }
+                catch
+                {
+                    Console.WriteLine("[!] Error building " + file); 
+                }
                 counter++;
             }
             Console.WriteLine("------------------------------------------------");
@@ -67,9 +77,15 @@ namespace BuildBOFs
             foreach (string file in MiscFiles)
             {
                 Console.WriteLine("[*] Working file (" + counter + "\\" + (CFiles.Count + MakeFIles.Count + msvcFiles.Count + MiscFiles.Count) + ") " + file);
-
-                BuildBatFile(file);
-                counter++;
+                try
+                {
+                    BuildBatFile(file);
+                }
+                catch
+                {
+                    Console.WriteLine("[!] Error building " + file);
+                }
+            counter++;
             }
         }
 
