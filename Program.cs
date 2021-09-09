@@ -291,7 +291,7 @@ Commands:
             {
                 process.OutputDataReceived += new DataReceivedEventHandler(outdata);
                 process.BeginOutputReadLine();
-                process.StandardInput.WriteLine(LinuxBuild + " \"cd " + workingdir + " && "+MakeFile+" make\"");
+                process.StandardInput.WriteLine(LinuxBuild + " \"cd " + workingdir + " &&  make\"");
                 process.WaitForExit(timeout);
                 //process.StandardInput.WriteLine("exit");
             }
