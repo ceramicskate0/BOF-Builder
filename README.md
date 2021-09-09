@@ -33,10 +33,8 @@ Its normally got a bat file `C:\Program Files (x86)\Microsoft Visual Studio\2019
         Tell to compile linux bins for x64 (86_64-w64-mingw32-gcc) (DEFAULT)
     -timeout
         Sets the timeout for the process who is building bin (DEFAULT 3 seconds) (time in milliseconds)
-    -linuxbuildbash
-        Tell app to use bash instead of wsl to compile linux bins
-    # Example Usage
-    ./BuildBOFs.exe C:\Path\To\BOF\Files\Dir
+    -wsl
+        Tell app to use wsl.exe instead of bash.exe to compile linux bins
 
 # Errors/ My stuff wont build
 - Why? Its often that the repo is missing something or has errors (errors like syntax or they coded it wrong). I can tell you i tested this on ~90% of BOF's on Github as of 09/2021 and most of them have errors as is. I suggest you fix them or send them an issue. The compiler output is shown to screen.
