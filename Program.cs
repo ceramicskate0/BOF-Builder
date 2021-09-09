@@ -16,7 +16,7 @@ namespace BuildBOFs
         private static bool x64 = true;
         private static string rootdir = "";
         private static string LinuxBuild = "bash -c";
-        private static string migngw = "86_64-w64-mingw32-gcc";
+        private static string migngw = "x86_64-w64-mingw32-gcc";
 
         public static void Main(string[] args)
         {
