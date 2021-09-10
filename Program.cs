@@ -17,7 +17,7 @@ namespace BuildBOFs
         private static string rootdir = "";
         private static string LinuxBuild = "bash -c";
         private static string migngw = "x86_64-w64-mingw32-gcc";
-
+        private static string syscallMasmArg = "-masm=intel";
         public static void Main(string[] args)
         {
             Logo();
@@ -305,15 +305,20 @@ Commands:
             string workingdir = Path.GetDirectoryName(CFile);
             string linuxfilePath = workingdir.Replace('\\', '/').Replace(@"C:/", @"/mnt/c/") + '/' + filename + ext;
             string outputPathLinux = workingdir.Replace('\\', '/').Replace(@"C:/", @"/mnt/c/") + '/' + filename + ".o";
-
+            string[] files = System.IO.Directory.GetFiles(workingdir, "*yscall*.h", System.IO.SearchOption.TopDirectoryOnly);
+            if (files.Length <= 0)
+            {
+                syscallMasmArg = "";
+            }
             using (var process = Process.Start(new ProcessStartInfo { FileName = @"cmd", Arguments = "", WorkingDirectory = Path.GetDirectoryName((CFile)), UseShellExecute = false, RedirectStandardInput = true, RedirectStandardOutput = true }))
             {
                 process.OutputDataReceived += new DataReceivedEventHandler(outdata);
                 process.BeginOutputReadLine();
-                process.StandardInput.WriteLine(LinuxBuild + " \""+ migngw + " -c " + linuxfilePath + " -o " + outputPathLinux + "\"");
+                process.StandardInput.WriteLine(LinuxBuild + " \""+ migngw + " -c " + linuxfilePath + " -o " + outputPathLinux + " "+ syscallMasmArg+"\"");
                 process.WaitForExit(timeout);
                 //process.StandardInput.WriteLine("exit");
             }
+            syscallMasmArg = "-masm=intel";
         }
 
     }
