@@ -13,7 +13,7 @@ Useful for building and I guess 'testing if they compile' BOF locally or in a pi
 - Install Visual Studio for the 'x64 Native Tools Command Prompt for VS 2019' or 'x86 Native Tools Command Prompt for VS 2019'
 
 # How to Use
-Run tool from 'x64 Native Tools Command Prompt for VS 2019' (if your goal is to install x64)
+Run tool from 'x64 Native Tools Command Prompt for VS 2019' (if your goal is to build x64)
 
 It runs like this from cmd.exe (or powershell) `%comspec% /k "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"`
 
