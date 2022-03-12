@@ -10,7 +10,7 @@ Useful for building and I guess 'testing if they compile' BOF locally or in a pi
  
 - Install these on Linux (WSL) `apt install gcc-mingw-w64-x86-64 gcc-mingw-w64-i686 make -y`
 
-- Install Visual Studio for the 'x64 Native Tools Command Prompt for VS 2019' or 'x86 Native Tools Command Prompt for VS 2019'
+- Install Visual Studio for the 'x64 Native Tools Command Prompt for VS 2019' or 'x86 Native Tools Command Prompt for VS {VERSION/Year}'
 
 # How to Use
 Run tool from 'x64 Native Tools Command Prompt for VS 2019' (if your goal is to build x64)
