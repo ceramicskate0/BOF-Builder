@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BuildBOFs": {
+      "commandName": "Project",
+      "commandLineArgs": "-rootdir C:\\Users\\Host\\source\\repos\\CobaltStrike-1\\BOF"
+    }
+  }
+}
