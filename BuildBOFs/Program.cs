@@ -352,7 +352,7 @@ Commands:
             {
                 process.OutputDataReceived += new DataReceivedEventHandler(outdata);
                 process.BeginOutputReadLine();
-                process.StandardInput.WriteLine(LinuxBuild + " \""+ migngw + " -c " + linuxfilePath + " -o " + outputPathLinux + " "+ syscallMasmArg+"\"");
+                process.StandardInput.WriteLine(LinuxBuild + " \""+ migngw + " -c " + linuxfilePath + " -o " + outputPathLinux + " "+ syscallMasmArg+" --strip-unneeded\"");
                 process.WaitForExit(timeout);
                 //process.StandardInput.WriteLine("exit");
             }
