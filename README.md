@@ -6,7 +6,7 @@ Useful for building and I guess 'testing if they compile' BOF locally or in a pi
 # Pre Req/ Install these first
 - Install Linux subsystems for windows
 
-- Install a Linux OS say ubuntu or kali form windows store (wsl.exe/bash.exe)
+- Install a Linux OS say ubuntu or kali form windows store (wsl.exe/bash.exe) (might need git also)
  
 - Install these on Linux (WSL) `apt install gcc-mingw-w64-x86-64 gcc-mingw-w64-i686 make -y`
 
