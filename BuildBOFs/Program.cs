@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -18,7 +18,13 @@ namespace BuildBOFs
         private static string rootdir = "";
         private static string LinuxBuild = "bash -c";
         private static string migngw = "x86_64-w64-mingw32-gcc";
-        private static string syscallMasmArg = "-masm=intel";
+        private static string mingw_stripX64="x86_64-w64-mingw32-strip"
+
+        private static string syscallMasmArg = "-masm=intel -Wall";
+
+        private static string strip_ALL_CMD = "--strip-all";
+        private static string strip_uneeded_CMD = "--strip-unneeded";
+
         public static void Main(string[] args)
         {
             Logo();
@@ -352,7 +358,8 @@ Commands:
             {
                 process.OutputDataReceived += new DataReceivedEventHandler(outdata);
                 process.BeginOutputReadLine();
-                process.StandardInput.WriteLine(LinuxBuild + " \""+ migngw + " -c " + linuxfilePath + " -o " + outputPathLinux + " "+ syscallMasmArg+" --strip-unneeded\"");
+                process.StandardInput.WriteLine(LinuxBuild + " \""+ migngw + " -c " + linuxfilePath + " -o " + outputPathLinux + " "+ syscallMasmArg+ " "+strip_uneeded_CMD+"\"");
+                //process.StandardInput.WriteLineLinuxBuild + " \"" + mingw_stripX64 + " -c " + linuxfilePath + " -o " + outputPathLinux + " " + syscallMasmArg + " " + strip_uneeded_CMD + "\"");
                 process.WaitForExit(timeout);
                 //process.StandardInput.WriteLine("exit");
             }
