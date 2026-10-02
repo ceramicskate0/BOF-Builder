@@ -1,5 +1,5 @@
 # BOF-Builder
-C# .Net 5.0 project to build BOF (Beacon Object Files) in mass based on them all being in a folder directory struct somewhere.
+This C# .Net 5.0 project to build BOF (Beacon Object Files) in mass based on them all being in a folder directory struct somewhere.
 
 Useful for building and I guess 'testing if they compile' BOF locally or in a pipeline ;)
 
